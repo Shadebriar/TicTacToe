@@ -19,9 +19,10 @@ const gameController = (() => {
 
     // Lets us know player one is the current active player
     let activePlayer = playerOne;
-
+    // Lets us know a message is on the page.
     let message = "";
 
+    // Resets the game to a clear grid, game over isn't active, and player 1 is going.
     const resetGame = () => {
         gameboard.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
         gameOver = false;
@@ -110,12 +111,16 @@ message.textContent = gameController.getMessage();
     });
 }
 
+// Creates a restart button
 const restartButton = document.createElement("button");
+    // Added text to that button.
     restartButton.textContent = "Restart";
+        // When restart button is clicked the game restarts and is cleared.
         restartButton.addEventListener("click", ()=> {
             gameController.resetGame();
             renderBoard();
         });
+        // Button still shows up on the page after the board is cleared.
         document.body.append(restartButton);
 
 renderBoard();
