@@ -10,8 +10,6 @@ const gameboard = (() => {
 function createPlayer(player, symbol) {
   return { player, symbol };
 }
-
-
 const GameController = (() => {
     // Creates the players needed for a game of Tic Tac Toe and the symbols needed.
     const playerOne = createPlayer("Player 1", "X");
@@ -23,6 +21,8 @@ const GameController = (() => {
     const getActivePlayer = () => activePlayer;
     // Switches between active players, which playerOne and playerTwo
     const playRound = (index) => {
+        // Enters the active player's symbol into one of the squares on the grid.
+        gameboard.grid[index] = activePlayer.symbol;
 
         if (activePlayer === playerOne) {
             activePlayer = playerTwo;
@@ -33,3 +33,18 @@ const GameController = (() => {
     // Returns playRound and the active player, so the rest of the application can interact with it.
     return { playRound, getActivePlayer };
 })();
+
+// All the winning array combinations in Tic Tac Toe
+const waysToWin = [
+    //Rows
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    //Columns
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    //Diagonials
+    [0, 4, 8], [2, 4, 6]
+];
+
+// Checks if any of the winning combinations have be completely acheived.
+const winner = waysToWin.some(combination =>
+    // Checks if every index spot in a specific winning line matches the active players symbol on the grid. 
+    combination.every(index => gameboard.grid[index] === activeplayer.symbol));
