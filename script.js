@@ -26,10 +26,14 @@ const GameController = (() => {
         // Enters the active player's symbol into one of the squares on the grid.
         gameboard.grid[index] = activePlayer.symbol;
 
-       // Winner declared and if not swaps to switching players.
+       // Winner declared
         const playerHasWon = winner(activePlayer);
         if (playerHasWon === true) {
-            `Winner is:  ${activePlayer.player}`
+            console.log(`Winner is:  ${activePlayer.player}`)
+        // If not checks if there's a tie by checking if the entire board is filled.
+        } else if (gameboard.grid.every(cell => cell !== " ")) {
+            console.log("There was a tie")
+        // If not a win or tie switch to player swapping.
         } else {
         if (activePlayer === playerOne) {
             activePlayer = playerTwo;
