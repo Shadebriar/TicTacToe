@@ -27,6 +27,7 @@ const gameController = (() => {
         gameboard.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
         gameOver = false;
         activePlayer = playerOne;
+        message = "";
 
     }
 
