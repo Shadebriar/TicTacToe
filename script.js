@@ -10,7 +10,7 @@ const gameboard = (() => {
 function createPlayer(player, symbol) {
   return { player, symbol };
 }
-const GameController = (() => {
+const gameController = (() => {
     // Creates the players needed for a game of Tic Tac Toe and the symbols needed.
     const playerOne = createPlayer("Player 1", "X");
     const playerTwo = createPlayer("Player 2", "O");
@@ -20,8 +20,18 @@ const GameController = (() => {
     // Lets us know player one is the current active player
     let activePlayer = playerOne;
 
+    let message = "";
+
+    const resetGame = () => {
+        gameboard.grid = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+        gameOver = false;
+        activePlayer = playerOne;
+
+    }
+
     //Displays the active player
     const getActivePlayer = () => activePlayer;
+    const getMessage = () => message;
 
     // Switches between active players, which playerOne and playerTwo
     const playRound = (index) => {
@@ -36,11 +46,11 @@ const GameController = (() => {
     const playerHasWon = winner(activePlayer);
         if (playerHasWon === true) {
             gameOver = true;
-            console.log(`Winner is:  ${activePlayer.player}`)
+            message = `Winner is:  ${activePlayer.player}`;
         // If not checks if there's a tie by checking if the entire board is filled.
         } else if (gameboard.grid.every(cell => cell !== " ")) {
             gameOver = true;
-            console.log("There was a tie")
+            message = "There was a tie";
         // If not a win or tie switch to player swapping.
         } else {
         if (activePlayer === playerOne) {
@@ -52,7 +62,7 @@ const GameController = (() => {
 
     };
     // Returns playRound and the active player, so the rest of the application can interact with it.
-    return { playRound, getActivePlayer };
+    return { playRound, getActivePlayer, resetGame, getMessage };
 })();
 
 // All the winning array combinations in Tic Tac Toe
@@ -75,9 +85,14 @@ return waysToWin.some(combination =>
 // Selects the board div on index.html
 const board = document.querySelector("#board");
 
+const message = document.querySelector("#message");
+
 function renderBoard() {
     // Makes the gameboard clear
     board.innerHTML = "";
+
+message.textContent = gameController.getMessage();
+
     // Cell lets us know if we have (" ", "X", or "O") and index lets us know where on the board.
     gameboard.grid.forEach((cell, index) => {
         // Creates a new div called panel
@@ -85,7 +100,7 @@ function renderBoard() {
             // An event listener so when an empty index is clicked it fills with the active player's symbol
             panel.addEventListener("click", () => {
                 if (gameboard.grid[index] === " ") {
-                    GameController.playRound(index);
+                    gameController.playRound(index);
                 
                     renderBoard();
                 }
@@ -94,5 +109,13 @@ function renderBoard() {
             board.append(panel)
     });
 }
+
+const restartButton = document.createElement("button");
+    restartButton.textContent = "Restart";
+        restartButton.addEventListener("click", ()=> {
+            gameController.resetGame();
+            renderBoard();
+        });
+        document.body.append(restartButton);
 
 renderBoard();
