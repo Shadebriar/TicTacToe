@@ -17,18 +17,27 @@ const GameController = (() => {
 
     // Lets us know player one is the current active player
     let activePlayer = playerOne;
+
     //Displays the active player
     const getActivePlayer = () => activePlayer;
+
     // Switches between active players, which playerOne and playerTwo
     const playRound = (index) => {
         // Enters the active player's symbol into one of the squares on the grid.
         gameboard.grid[index] = activePlayer.symbol;
 
+       // Winner declared and if not swaps to switching players.
+        const playerHasWon = winner(activePlayer);
+        if (playerHasWon === true) {
+            `Winner is:  ${activePlayer.player}`
+        } else {
         if (activePlayer === playerOne) {
             activePlayer = playerTwo;
         } else {      
             activePlayer = playerOne;
+            }
         }
+
     };
     // Returns playRound and the active player, so the rest of the application can interact with it.
     return { playRound, getActivePlayer };
@@ -44,7 +53,10 @@ const waysToWin = [
     [0, 4, 8], [2, 4, 6]
 ];
 
-// Checks if any of the winning combinations have be completely acheived.
-const winner = waysToWin.some(combination =>
+function winner(activePlayer) {
+// Checks if any of the winning combinations have be acheived.
+return waysToWin.some(combination =>
     // Checks if every index spot in a specific winning line matches the active players symbol on the grid. 
-    combination.every(index => gameboard.grid[index] === activeplayer.symbol));
+    combination.every(index => gameboard.grid[index] === activePlayer.symbol)
+    );
+}
